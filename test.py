@@ -1,5 +1,6 @@
 import time
 import serial
+import json
 
 from google.cloud import pubsub_v1
 
@@ -15,9 +16,9 @@ subscription_path = subscriber.subscription_path(
     project_id, subscription_name)
 
 def callback(message):
-    print('Received message: {}'.format(message))
+    print(message.data)
     message.ack()
-    ser.write('5')
+    ser.write(message.data)
 
 
 subscriber.subscribe(subscription_path, callback=callback)
