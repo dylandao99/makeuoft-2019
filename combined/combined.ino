@@ -1,7 +1,7 @@
 int rotary = A0;
 int rotaryData;
 int oldRotaryData = 0;
-int buzzer = A1;
+int buzzer = 11;
 char readByte1 = 0;
 char readByte2 = 0;
 int writeBuzzer = 0;
@@ -13,17 +13,21 @@ void setup(){
 }
 
 void loop(){
-  rotaryData = analogRead(rotary);
-  if (oldRotaryData != rotaryData){
-    Serial.write(rotaryData);
-    oldRotaryData = rotaryData;
-  }
   if (Serial.available() > 0){
     readByte1 = Serial.read();
+    Serial.print('a');
+    Serial.print(readByte1, BIN);
+    Serial.print('\n');
     readByte2 = Serial.read();
+    Serial.print('b');
+    Serial.print(readByte2, BIN);
+    Serial.print('\n');
     writeBuzzer = 0;
     writeBuzzer = readByte1<<2 & readByte2>>6;
+    Serial.print('c');
+    Serial.print(writeBuzzer, BIN);
+    Serial.print('\n');
     analogWrite(buzzer, writeBuzzer);
-    delay(2000);
+    delay(100);
   }
 }
