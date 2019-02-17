@@ -7,7 +7,7 @@ from google.cloud import pubsub_v1
 project_id = "communications-1550350888587"
 subscription_name = "testsub"
 
-ser = serial.Serial('/dev/ttyACM0',9600)
+ser = serial.Serial('/dev/tty96B0',9600)
 
 subscriber = pubsub_v1.SubscriberClient()
 # The `subscription_path` method creates a fully qualified identifier
@@ -16,9 +16,9 @@ subscription_path = subscriber.subscription_path(
     project_id, subscription_name)
 
 def callback(message):
-    print(message.data + "\n")
+    print('Received message: {}'.format(message))
     message.ack()
-    ser.write(message.data + "\n")
+    ser.write('5')
 
 
 subscriber.subscribe(subscription_path, callback=callback)

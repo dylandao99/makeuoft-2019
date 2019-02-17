@@ -1,4 +1,5 @@
 int buzzer = 3;
+char data = 'a';
 
 void setup(){
 	pinMode(buzzer, OUTPUT);
@@ -7,7 +8,12 @@ void setup(){
 
 void loop(){
 	if (Serial.available() > 0){
-		digitalWrite(buzzer, HIGH);
-		delay(2000);
+	data = Serial.read();
+		if (data == '1'){
+			digitalWrite(buzzer, HIGH);
+			}
+		else if (data == '0'){
+			digitalWrite(buzzer, LOW);
+		}
 	}
 }
