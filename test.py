@@ -6,7 +6,7 @@ from google.cloud import pubsub_v1
 project_id = "communications-1550350888587"
 subscription_name = "testsub"
 
-ser = serial.Serial('/dev/ttyUSB0',9600)
+ser = serial.Serial('/dev/tty96B0',9600)
 
 subscriber = pubsub_v1.SubscriberClient()
 # The `subscription_path` method creates a fully qualified identifier
