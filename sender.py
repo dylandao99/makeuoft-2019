@@ -7,7 +7,7 @@ from google.cloud import pubsub_v1
 project_id = "communications-1550350888587"
 topic_name = "test"
 
-ser = serial.Serial('/dev/tty96B0',9600)
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 publisher = pubsub_v1.PublisherClient()
 topic_path = publisher.topic_path(project_id, topic_name)
@@ -32,12 +32,18 @@ def callback(message_future):
 
 # We must keep the main thread from exiting to allow it to process
 # messages in the background.
+ser.flush()
 while True:
 	if (ser.in_waiting > 0):
+                time.sleep(0.5)
 		x = ser.read_until('\n')
-		x = struct.unpack('>H', b'\x00' + x)[0]
-		data = '{}'.format(x)
-		data = data.encode('utf-8')
+                x = x[0:1]
+                x = ord(x)
+                x = str(x)
+                #x = struct.unpack('>H', b'\x00' + x)[0]
+		data = '{}\n'.format(x)
+		#data = data.encode('utf-8')
+                data = x
 		message_future = publisher.publish(topic_path, data=data)
 		message_future.add_done_callback(callback)
 		print(data)
