@@ -1,6 +1,7 @@
 import logging
 import multiprocessing
 import time
+import serial
 
 from google.cloud import pubsub_v1
 
