@@ -1,5 +1,6 @@
 import time
 import serial
+import struct
 
 from google.cloud import pubsub_v1
 
@@ -31,7 +32,16 @@ def callback(message_future):
 
 # We must keep the main thread from exiting to allow it to process
 # messages in the background.
+x_old = 0
 while True:
-    x = ser.read()
-    print(x)
-    time.sleep(60)
+    if (ser.in_waiting > 0):
+        x = ser.read(1)
+        x = struct.unpack('>H', b'\x00' + x)[0]
+        if (abs(x-x_old) > 5):
+            print(x)
+            data = '{}'.format(x)
+            data = data.encode('utf-8')
+            message_future = publisher.publish(topic_path, data=data)
+            message_future.add_done_callback(callback)
+            print(data)
+            x_old = x
